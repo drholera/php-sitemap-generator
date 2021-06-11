@@ -501,7 +501,7 @@ class SitemapGenerator
     /**
      * Move flushed files to their final location. Compress if necessary.
      */
-    public function finalize(...$staticSitemaps)
+    public function finalize(string ...$staticSitemaps)
     {
         $this->generatedFiles = [];
 
