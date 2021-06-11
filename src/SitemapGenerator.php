@@ -422,7 +422,7 @@ class SitemapGenerator
         $this->xmlWriter->writeElement('loc', htmlspecialchars($loc, ENT_QUOTES));
 
         if ($lastModified !== null) {
-            $this->xmlWriter->writeElement('lastmod', $lastModified->format(DateTime::ATOM));
+            $this->xmlWriter->writeElement('lastmod', $lastModified->format(\DateTimeInterface::ATOM));
         }
 
         if ($changeFrequency !== null) {
