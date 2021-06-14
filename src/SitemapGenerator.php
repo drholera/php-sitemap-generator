@@ -422,7 +422,7 @@ class SitemapGenerator
         $this->xmlWriter->writeElement('loc', htmlspecialchars($loc, ENT_QUOTES));
 
         if ($lastModified !== null) {
-            $this->xmlWriter->writeElement('lastmod', $lastModified->format(DateTime::ATOM));
+            $this->xmlWriter->writeElement('lastmod', $lastModified->format(\DateTimeInterface::ATOM));
         }
 
         if ($changeFrequency !== null) {
@@ -501,7 +501,7 @@ class SitemapGenerator
     /**
      * Move flushed files to their final location. Compress if necessary.
      */
-    public function finalize()
+    public function finalize(string ...$staticSitemaps)
     {
         $this->generatedFiles = [];
 
@@ -542,6 +542,13 @@ class SitemapGenerator
                 }
                 $sitemapsUrls[] = htmlspecialchars($this->baseURL . '/' . $targetSitemapFilename, ENT_QUOTES);
                 $targetSitemapFilepaths[] = $targetSitemapFilepath;
+            }
+
+            if ($staticSitemaps) {
+                $sitemapsUrls = array_merge(
+                    $sitemapsUrls,
+                    $staticSitemaps
+                );
             }
 
             $targetSitemapIndexFilepath = $this->basePath . $this->sitemapIndexFileName;
