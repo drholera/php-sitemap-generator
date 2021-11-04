@@ -209,6 +209,8 @@ class SitemapGenerator
     private $sitemapUrlCount = 0;
     private $generatedFiles = [];
 
+    private $sitemapsUrlPrefix = '';
+
     /**
      * @param string $baseURL You site URL
      * @param string $basePath Relative path where sitemap and robots should be stored.
@@ -253,6 +255,22 @@ class SitemapGenerator
         $w->openMemory();
         $w->setIndent(true);
         return $w;
+    }
+
+    /**
+     * Will only be used for several sitemaps generation.
+     * 
+     * @param string $prefix
+     * @return SitemapGenerator
+     */
+    public function setSitemapsUrlPrefix(string $prefix): SitemapGenerator
+    {
+        if (strlen($prefix) === 0) {
+            throw new InvalidArgumentException('sitemaps prefix should not be empty');
+        }
+
+        $this->sitemapsUrlPrefix = $prefix;
+        return $this;
     }
 
     /**
@@ -540,7 +558,10 @@ class SitemapGenerator
                 } else {
                     $this->fs->rename($flushedSitemap, $targetSitemapFilepath);
                 }
-                $sitemapsUrls[] = htmlspecialchars($this->baseURL . '/' . $targetSitemapFilename, ENT_QUOTES);
+                $currentSitemapUrl = !empty($this->sitemapsUrlPrefix) ?
+                    $this->baseURL . '/' . $this->sitemapsUrlPrefix . '/' . $targetSitemapFilename :
+                    $this->baseURL . '/' . $targetSitemapFilename;
+                $sitemapsUrls[] = htmlspecialchars($currentSitemapUrl, ENT_QUOTES);
                 $targetSitemapFilepaths[] = $targetSitemapFilepath;
             }
 
