@@ -672,6 +672,11 @@ class SitemapGenerator
         return $result;
     }
 
+    public function setRobotsSampleContent(...$lines): void
+    {
+        $this->sampleRobotsLines = $lines;
+    }
+
     /**
      * Adds sitemap url to robots.txt file located in basePath.
      * If robots.txt file exists,
